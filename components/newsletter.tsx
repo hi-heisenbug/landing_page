@@ -151,9 +151,7 @@ export const Newsletter = () => {
                   }}
                   className="text-base short:lg:text-lg sm:text-lg lg:text-xl !leading-[1.1] font-medium text-center text-foreground text-pretty"
                 >
-                  Stay updated with the latest news and exclusive content!
-                  Subscribe to our newsletter today and never miss out on
-                  exciting updates.
+                  Innovation is Entangling... Stay Tuned
                 </motion.p>
               </div>
             </motion.div>
