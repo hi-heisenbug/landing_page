@@ -10,6 +10,7 @@ import { Logo } from "./landing/logo";
 const footerLinks = [
   { href: links.repo, label: "GitHub", external: true },
   { href: links.docs, label: "Docs", external: true },
+  { href: "/blog", label: "Blog", external: false },
   { href: "/#faq", label: "FAQ", external: false },
   { href: "/manifesto", label: "Manifesto", external: false },
   { href: `mailto:${contactEmail}`, label: "Contact", external: false },

@@ -12,7 +12,7 @@ import { Logo } from "./logo";
 const navLinks = [
   { href: "/#product", label: "Product" },
   { href: "/#how-it-works", label: "How it works" },
-  { href: "/#open-source", label: "Open source" },
+  { href: "/blog", label: "Blog" },
   { href: "/manifesto", label: "Manifesto" },
 ];
 

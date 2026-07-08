@@ -105,9 +105,9 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
 
 export const WhyNow = () => {
   const stats = [
-    { value: "84", label: "malicious versions published from one compromised release pipeline" },
-    { value: "6 min", label: "the malicious code ran inside a legitimate pipeline before anyone noticed" },
-    { value: "0", label: "static scanners flagged it; the only signals were behavioral, at the kernel" },
+    { value: "0", label: "suspicious strings in the package.json diff — the version bump looked routine" },
+    { value: "<3s", label: "to attribute the drift to the exact package once it misbehaved" },
+    { value: "1", label: "Helm command to start watching a namespace — no code changes, no sidecars" },
   ];
 
   return (
@@ -123,8 +123,8 @@ export const WhyNow = () => {
           ))}
         </div>
         <p className="mx-auto max-w-6xl px-6 pb-10 text-center font-mono text-xs text-[#464646]/50">
-          The 2026 npm supply-chain attacks (TanStack, Axios, Shai-Hulud) all shared one trait:
-          install-time checks were green while runtime behavior changed.
+          The pattern behind the 2026 npm supply-chain attacks (TanStack, Axios, Shai-Hulud):
+          install-time checks stayed green while runtime behavior changed.
         </p>
       </div>
     </section>
