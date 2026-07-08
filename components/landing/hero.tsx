@@ -43,7 +43,7 @@ export const Hero = () => {
         animate="visible"
       >
         <motion.div
-          className="flex flex-col items-start gap-6"
+          className="flex min-w-0 flex-col items-start gap-6"
           variants={containerVariants}
         >
           {/* Animated badge/pill */}

@@ -17,7 +17,7 @@ export const CopyCommand = ({ label, command }: { label: string; command: string
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-[#1a1a2e] shadow-[0_16px_40px_-20px_rgba(70,70,70,0.25)]">
+    <div className="min-w-0 max-w-full overflow-hidden rounded-2xl bg-[#1a1a2e] shadow-[0_16px_40px_-20px_rgba(70,70,70,0.25)]">
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
         <p className="font-mono text-xs text-neutral-400">{label}</p>
         <button
@@ -29,7 +29,7 @@ export const CopyCommand = ({ label, command }: { label: string; command: string
           {copied ? <CheckIcon className="size-4 text-[#93cb52]" /> : <CopyIcon className="size-4" />}
         </button>
       </div>
-      <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-neutral-200 sm:text-sm">
+      <pre className="max-w-full overflow-x-auto p-4 font-mono text-xs leading-relaxed text-neutral-200 sm:text-sm">
         {command}
       </pre>
     </div>

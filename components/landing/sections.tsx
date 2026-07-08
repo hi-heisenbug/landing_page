@@ -554,7 +554,7 @@ export const OpenSource = () => (
       {/* Animated dot grid pattern */}
       <AnimatedDotGrid />
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:py-28">
-        <div className="flex flex-col items-start gap-5">
+        <div className="flex min-w-0 flex-col items-start gap-5">
           <p className="font-mono text-xs uppercase tracking-[0.2em] bg-gradient-to-r from-[#93cb52] to-[#1c9770] bg-clip-text text-transparent">
             Open source
           </p>
@@ -578,7 +578,7 @@ export const OpenSource = () => (
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex min-w-0 flex-col gap-3">
           <CopyCommand
             label="Try it locally - no root needed"
             command={`git clone https://github.com/hi-heisenbug/goodman
