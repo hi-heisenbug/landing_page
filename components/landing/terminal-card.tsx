@@ -6,7 +6,7 @@ export const TerminalCard = () => {
         <span className="size-2.5 rounded-full bg-[#febc2e]" />
         <span className="size-2.5 rounded-full bg-[#28c840]" />
         <span className="ml-3 font-mono text-xs text-neutral-400">
-          goodmanctl — alerts tail
+          goodmanctl: alerts tail
         </span>
       </div>
       <div className="overflow-x-auto p-4 font-mono text-xs leading-relaxed sm:p-5 sm:text-sm">

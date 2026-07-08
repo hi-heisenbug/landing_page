@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    /* Heisenbug brand — light theme
+    /* Heisenbug brand: light theme
        Green #93cb52 · Turquoise #1c9770 · Light Turquoise #bef3e2
        Off-white #f2eeee · Dark Gray #464646 */
     --background: 0 0% 100%;
     --foreground: 0 0% 13%;
-    /* Brand green — primary CTA fill */
+    /* Brand green, primary CTA fill */
     --primary: 88 54% 56%;
     --primary-foreground: 0 0% 10%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 13%;
-    /* Off-white #f2eeee — tinted section backgrounds */
+    /* Off-white #f2eeee, tinted section backgrounds */
     --secondary: 0 13% 94%;
     --secondary-foreground: 0 0% 13%;
     --muted: 0 13% 94%;
     /* Dark gray #464646 territory for supporting text */
     --muted-foreground: 0 0% 34%;
-    /* Turquoise #1c9770 — links, icons, highlights */
+    /* Turquoise #1c9770, links, icons, highlights */
     --accent: 161 69% 35%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 45%;
@@ -46,7 +46,7 @@
   }
 
   .dark {
-    /* Heisenbug brand — dark theme
+    /* Heisenbug brand: dark theme
        Deep charcoal base with brand green/turquoise accents */
     --background: 220 15% 6%;
     --foreground: 0 0% 93%;

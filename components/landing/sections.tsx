@@ -105,9 +105,9 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
 
 export const WhyNow = () => {
   const stats = [
-    { value: "0", label: "suspicious strings in the package.json diff — the version bump looked routine" },
+    { value: "0", label: "suspicious strings in the package.json diff; the version bump looked routine" },
     { value: "<3s", label: "to attribute the drift to the exact package once it misbehaved" },
-    { value: "1", label: "Helm command to start watching a namespace — no code changes, no sidecars" },
+    { value: "1", label: "Helm command to start watching a namespace, no code changes, no sidecars" },
   ];
 
   return (

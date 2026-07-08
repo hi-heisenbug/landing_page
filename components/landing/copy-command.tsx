@@ -12,7 +12,7 @@ export const CopyCommand = ({ label, command }: { label: string; command: string
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // clipboard unavailable (e.g. non-secure context) — ignore
+      // clipboard unavailable (e.g. non-secure context); ignore
     }
   };
 

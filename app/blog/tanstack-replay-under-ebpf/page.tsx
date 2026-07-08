@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Replaying an npm supply-chain attack under eBPF",
     description:
-      "What the kernel sees that your scanner doesn't — a reproducible eBPF replay attributing a supply-chain attack pattern to the exact npm package.",
+      "What the kernel sees that your scanner doesn't: a reproducible eBPF replay attributing a supply-chain attack pattern to the exact npm package.",
     url: "https://www.heisenbug.ai/blog/tanstack-replay-under-ebpf",
     type: "article",
     images: [{ url: "/dashboard.png", width: 1600, height: 900 }],
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Replaying an npm supply-chain attack under eBPF",
     description:
-      "What the kernel sees that your scanner doesn't — a reproducible eBPF replay attributing a supply-chain attack pattern to the exact npm package.",
+      "What the kernel sees that your scanner doesn't: a reproducible eBPF replay attributing a supply-chain attack pattern to the exact npm package.",
     images: ["/dashboard.png"],
   },
 };
@@ -77,8 +77,8 @@ export default function TanStackReplayPost() {
           sees that your scanner doesn&apos;t
         </h1>
         <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-          In 2026, a run of npm supply-chain attacks — TanStack, Axios, and
-          the Shai-Hulud family — shared one uncomfortable trait: the
+          In 2026, a run of npm supply-chain attacks (TanStack, Axios, and
+          the Shai-Hulud family) shared one uncomfortable trait: the
           malicious package versions passed static scanning. Nothing in the
           registry metadata, the dependency graph, or a pre-install scan
           flagged them. The only signals that would have caught them in time
@@ -97,9 +97,9 @@ export default function TanStackReplayPost() {
           always done before.
         </P>
         <P>
-          This post walks through a real replay of that attack pattern — the
+          This post walks through a real replay of that attack pattern, the
           same scenario our end-to-end test suite runs on every change to the
-          sensor — and shows exactly what shows up in the kernel, second by
+          sensor, and shows exactly what shows up in the kernel, second by
           second.
         </P>
 
@@ -115,7 +115,7 @@ export default function TanStackReplayPost() {
 
         <H2>What we replayed</H2>
         <P>
-          We used Goodman&apos;s own end-to-end harness — the same one that
+          We used Goodman&apos;s own end-to-end harness, the same one that
           has to pass before we merge any change to the sensor or the
           attribution logic. It&apos;s not a simulation layered on top of the
           product; it&apos;s the product&apos;s own regression test, and
@@ -132,14 +132,14 @@ sudo make e2e`}</Code>
           service.
         </P>
         <P>
-          <strong>good-pkg@1.0.0</strong> — the baseline — reads one file
+          <strong>good-pkg@1.0.0</strong>, the baseline, reads one file
           inside its own package directory and returns. That&apos;s the
           entire behavioral fingerprint. No network. No secrets. No child
           processes.
         </P>
         <P>
-          <strong>good-pkg@1.0.1</strong> — same public API, same version
-          bump you&apos;d approve without a second look — adds two behaviors:
+          <strong>good-pkg@1.0.1</strong>, same public API, same version
+          bump you&apos;d approve without a second look, adds two behaviors:
         </P>
         <Code>{`// NEW BEHAVIOR #1: read a credentials file
 secret = fs.readFileSync(FAKE_CRED, "utf8");
@@ -156,7 +156,7 @@ exfiltrate(secret);`}</Code>
         <H2>What the kernel saw</H2>
         <P>
           Goodman learned <InlineCode>good-pkg@1.0.0</InlineCode>&apos;s
-          baseline over several minutes of live traffic — the collector needs
+          baseline over several minutes of live traffic; the collector needs
           enough observations before it promotes a fingerprint to
           &ldquo;known good.&rdquo; Once promoted, we swapped the dependency
           to 1.0.1 and hit the same endpoint again. Here&apos;s the tail of{" "}
@@ -172,14 +172,14 @@ package   · good-pkg  1.0.0 → 1.0.1
 + NEW CONNECT 127.0.0.1:9999
 
 baseline learned over 6 rounds of live traffic · 0 prior anomalies
-→ attributed to good-pkg in <3s. static scanning would have shown nothing —
+→ attributed to good-pkg in <3s. static scanning would have shown nothing:
   the package.json diff for 1.0.0 → 1.0.1 has no suspicious strings.`}</Code>
         <P>Two things worth pulling apart here:</P>
         <P>
           <strong>The syscalls alone aren&apos;t the hard part.</strong> Any
           eBPF-based runtime security tool (Falco and similar) can tell you
           that a process opened a new file or made a new connection.
-          That&apos;s necessary but not sufficient — in a service with 40+
+          That&apos;s necessary but not sufficient: in a service with 40+
           dependencies, &ldquo;something in this process did something
           new&rdquo; doesn&apos;t tell an on-call engineer where to look.
         </P>
@@ -191,8 +191,8 @@ baseline learned over 6 rounds of live traffic · 0 prior anomalies
           and maps that to the package&apos;s <InlineCode>package.json</InlineCode> version.
           That&apos;s how the alert above names <InlineCode>good-pkg</InlineCode> specifically,
           not just &ldquo;node process 41213.&rdquo; When the stack doesn&apos;t
-          resolve cleanly — a native addon, a bundler that flattens frames, a
-          worker thread — Goodman reports <InlineCode>&lt;unknown&gt;</InlineCode> rather
+          resolve cleanly (a native addon, a bundler that flattens frames, a
+          worker thread), Goodman reports <InlineCode>&lt;unknown&gt;</InlineCode> rather
           than guess. A wrong package name sent to an incident channel is
           worse than no name at all; it sends the on-call engineer somewhere
           wrong while the actual package keeps running.
@@ -215,7 +215,7 @@ baseline learned over 6 rounds of live traffic · 0 prior anomalies
           <li>
             <strong>CI/CD hardening</strong> (pinning, minimum release age,
             delayed upgrades) raises the cost of installing a version within
-            minutes of publish — it does nothing once a version is already
+            minutes of publish. It does nothing once a version is already
             deployed and has been running safely for days before a
             maintainer&apos;s account or pipeline is compromised and pushes a
             malicious point release under the same version scheme.
@@ -223,13 +223,13 @@ baseline learned over 6 rounds of live traffic · 0 prior anomalies
           <li>
             <strong>Runtime is the only layer left</strong>, and until now
             it&apos;s mostly meant &ldquo;does this container do something a
-            WAF or network policy blocks&rdquo; — not &ldquo;does this
+            WAF or network policy blocks&rdquo; rather than &ldquo;does this
             specific dependency behave differently than it always has.&rdquo;
           </li>
         </ul>
         <P>
           That&apos;s the layer Goodman adds. It&apos;s explicitly
-          complementary to scanning and CI hardening, not a replacement — you
+          complementary to scanning and CI hardening, not a replacement; you
           want all three. But 2026 showed what happens when only the first
           two exist.
         </P>
@@ -243,8 +243,8 @@ baseline learned over 6 rounds of live traffic · 0 prior anomalies
 cd goodman
 make demo`}</Code>
         <P>
-          Open <InlineCode>http://127.0.0.1:8844</InlineCode> — the dashboard
-          seeds baseline fingerprints and the drift alert above so you can
+          Open <InlineCode>http://127.0.0.1:8844</InlineCode>. The dashboard
+          seeds baseline fingerprints and the drift alert above, so you can
           click through the same alert we just walked through. For the real
           eBPF path against your own workload:
         </P>
@@ -258,7 +258,7 @@ make demo`}</Code>
         </P>
         <P>
           We&apos;re taking a small number of design partners to run this
-          against real production traffic — if runtime dependency drift is
+          against real production traffic. If runtime dependency drift is
           something your team has thought about since the 2026 wave of
           attacks, we&apos;d like to hear where this breaks.{" "}
           <Link href={`mailto:${contactEmail}`} className="text-accent underline underline-offset-2">

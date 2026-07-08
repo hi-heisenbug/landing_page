@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-// Explicitly welcome search engines AND AI/LLM crawlers — being citable by
+// Explicitly welcome search engines AND AI/LLM crawlers: being citable by
 // ChatGPT, Claude, Perplexity, and Google AI Overviews is a distribution channel.
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -113,7 +113,7 @@ export const Footer = () => {
             <p>Goodman is open source under Apache-2.0.</p>
           </div>
 
-          {/* Back to top button — pure anchor, works with CSS scroll-behavior: smooth on <html> */}
+          {/* Back to top button: pure anchor, works with CSS scroll-behavior: smooth on <html> */}
           <a
             href="#"
             className="group inline-flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 font-mono text-xs text-muted-foreground transition-all duration-300 hover:border-[#1c9770]/20 hover:bg-gradient-to-r hover:from-[#93cb52]/10 hover:to-[#1c9770]/10 hover:text-[#1c9770]"
