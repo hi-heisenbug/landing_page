@@ -51,12 +51,7 @@ const SubmissionStateMessage = ({ value, reset }: { value: ActionResult<string> 
 }
 
 const getDefaultValues = () => {
-  if (typeof window !== 'undefined') {
-    const email = localStorage.getItem('email');
-    return { email: email || '' };
-  }
-
-  return { email: '' };
+  return { email: "" };
 }
 
 export const FormNewsletter = ({
@@ -74,14 +69,22 @@ export const FormNewsletter = ({
     defaultValues: getDefaultValues()
   });
 
+  // Restore saved email from localStorage after hydration
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    if (savedEmail) {
+      form.setValue("email", savedEmail);
+    }
+  }, [form]);
+
   useEffect(() => {
     return () => {
-      const v = form.getValues('email');
+      const v = form.getValues("email");
 
       if (v != undefined) {
-        localStorage.setItem('email', v);
+        localStorage.setItem("email", v);
       }
-    }
+    };
   }, [form]);
 
   async function onSubmit(values: NewsletterSchema) {

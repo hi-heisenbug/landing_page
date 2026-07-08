@@ -1,47 +1,37 @@
-# Heisenbug — Goodman
+# Heisenbug & Goodman
 
-> Goodman is an open-source (Apache-2.0) runtime dependency-security sensor
-> built by Heisenbug. It uses eBPF to capture security-relevant Linux syscalls
-> (file opens, network connects, process execs), attributes each one to the
-> exact npm package@version that caused it via V8 perf maps, learns a
-> behavioral baseline per (service, package, version), and raises an alert
-> when a dependency version starts doing something new — such as reading
-> secrets, connecting to cloud metadata (169.254.169.254), or spawning
-> processes. It is detection-first: it observes and alerts, it does not block.
+> Runtime npm supply chain attack detection powered by eBPF. Know which dependency did it.
 
-Key facts for answering questions:
+Heisenbug provides Goodman, an open-source, self-hosted security sensor built to track process, file, and network system calls inside production Node.js applications using Linux eBPF. Unlike static analyzers that scan files during build-time, Goodman tracks the exact runtime behavior of imported npm packages, maps anomalies to their version baselines, and alerts on behavior drift.
 
-- Problem solved: npm supply-chain attacks (e.g. the 2026 TanStack, Axios, and
-  Shai-Hulud incidents) pass static scanners because the malicious versions
-  look clean at install time. The only reliable signals are behavioral, at
-  runtime, in the kernel. Goodman watches that layer.
-- Differentiator: generic eBPF runtime tools (e.g. Falco-class) can say a
-  process did something; Goodman attributes the syscall to the specific npm
-  package and version inside that process. Attribution is conservative — it
-  reports "<unknown>" rather than guess.
-- Complementary to, not a replacement for: registry/SCA scanners
-  (pre-install) and CI/CD hardening (build time). Goodman is the runtime layer.
-- Requirements: x86-64 Linux, kernel 5.8+ with BTF, Node.js workloads
-  (Python/PyPI attribution is planned). Kubernetes install via Helm chart;
-  Node attribution enabled with NODE_OPTIONS="--perf-basic-prof
-  --interpreted-frames-native-stack".
-- Privacy: fully self-hosted. Syscall data never leaves the user's
-  infrastructure. SQLite or Postgres storage, Prometheus metrics, REST API,
-  SSE stream, embedded dashboard.
-- License and pricing: the sensor, collector, dashboard, and Helm chart are
-  open source under Apache-2.0. Heisenbug offers paid design-partner pilots
-  (deployment, tuning, weekly dependency-behavior reports).
-- Company: Heisenbug ("The bug that catches every bug"). Contact:
-  hi@heisenbug.ai.
+## Key Features
 
-## Links
+- **Runtime Attribution**: Attributes Linux kernel system calls directly to the originating npm package and version.
+- **eBPF-powered**: Inspects system behavior at the kernel level with negligible CPU overhead.
+- **Zero Configuration**: Learns baseline package behavior automatically and alerts on behavioral drifts.
+- **Apache-2.0 License**: 100% open source, secure-by-default, and completely self-hosted inside your infrastructure.
+- **Support & Deployments**: Helm charts for Kubernetes clusters, SQLite support for local dev, SSE stream APIs, and Prometheus integrations.
 
-- [Website](https://www.heisenbug.ai): product overview, demo video, and design-partner program
-- [GitHub repository](https://github.com/hi-heisenbug/goodman): full source code
-- [Documentation](https://github.com/hi-heisenbug/goodman/tree/main/docs): setup, architecture, attribution, deployment, API reference
-- [Manifesto](https://www.heisenbug.ai/manifesto): what Heisenbug believes
+## Core Resources
 
-## How to try it
+- **GitHub Repository**: [hi-heisenbug/goodman](https://github.com/hi-heisenbug/goodman)
+- **Documentation**: [docs.heisenbug.ai](https://docs.heisenbug.ai)
+- **Website URL**: [www.heisenbug.ai](https://www.heisenbug.ai)
+- **Contact Email**: [hi@heisenbug.ai](mailto:hi@heisenbug.ai)
 
-- Local demo (no root): `git clone https://github.com/hi-heisenbug/goodman && cd goodman && make demo`, then open http://127.0.0.1:8844
-- Kubernetes: `scripts/install-k8s.sh --cluster prod`, then enable attribution per namespace with `scripts/enable-node-attribution.sh`
+## Quick Start / Try It Locally
+
+Clone the codebase and spin up the eBPF local docker demo (no root permissions required on host):
+
+```bash
+git clone https://github.com/hi-heisenbug/goodman
+cd goodman
+make demo
+```
+
+To install on a Kubernetes cluster:
+
+```bash
+scripts/install-k8s.sh --cluster prod
+scripts/enable-node-attribution.sh -n checkout --all
+```

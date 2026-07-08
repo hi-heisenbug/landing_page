@@ -10,11 +10,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border border-border/15 bg-background text-foreground hover:border-border/30 hover:bg-secondary shadow-button hover:shadow-button-hover",
+          "border border-[#464646]/10 bg-white/80 backdrop-blur-md text-[#464646] hover:border-[#464646]/20 hover:bg-white shadow-button hover:shadow-button-hover",
         ghost: "hover:bg-secondary hover:text-foreground",
         link: "text-accent underline-offset-4 hover:underline",
         iconButton:
-          "border border-primary bg-primary text-primary-foreground hover:brightness-[0.96] disabled:bg-primary/50 shadow-button hover:shadow-button-hover",
+          "border border-[#7fbf3a] bg-gradient-to-r from-[#93cb52] to-[#7ec241] text-primary-foreground hover:brightness-[0.96] disabled:bg-primary/50 shadow-[0_1px_2px_rgba(147,203,82,0.15),0_2px_8px_rgba(147,203,82,0.1)] hover:shadow-[0_2px_12px_rgba(147,203,82,0.35),0_6px_24px_rgba(147,203,82,0.2)]",
+        "outline-glow":
+          "border border-[#464646]/15 bg-transparent text-[#464646] hover:border-[#93cb52]/50 hover:shadow-[0_0_16px_rgba(147,203,82,0.12)] hover:text-[#464646]",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       },
       size: {
         sm: "h-8 px-3 text-xs",

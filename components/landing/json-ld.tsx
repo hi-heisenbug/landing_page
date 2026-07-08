@@ -25,7 +25,7 @@ const software = {
   applicationCategory: "SecurityApplication",
   operatingSystem: "Linux, Kubernetes",
   description:
-    "Open-source eBPF runtime dependency-security sensor that attributes security-relevant syscalls to the exact npm package that caused them and alerts on behavioral drift — built to detect npm supply-chain attacks that pass static scanners.",
+    "Open-source eBPF runtime dependency-security sensor that attributes security-relevant syscalls to the exact npm package that caused them and alerts on behavioral drift, built to detect npm supply-chain attacks that pass static scanners.",
   url: "https://www.heisenbug.ai",
   downloadUrl: links.repo,
   license: "https://www.apache.org/licenses/LICENSE-2.0",

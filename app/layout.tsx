@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.heisenbug.ai"),
   title: {
     template: "%s | Heisenbug",
-    default: "Heisenbug — Detect npm supply-chain attacks at runtime with eBPF",
+    default: "Heisenbug | Detect npm supply-chain attacks at runtime with eBPF",
   },
   description:
     "Goodman is an open-source eBPF sensor that attributes security-relevant syscalls to the exact npm package that caused them and alerts when a dependency's behavior drifts from its learned baseline. Runtime detection for npm supply-chain attacks that pass static scanners.",
@@ -67,9 +67,9 @@ export const metadata: Metadata = {
   creator: "Heisenbug",
   category: "technology",
   openGraph: {
-    title: "Heisenbug — Detect npm supply-chain attacks at runtime with eBPF",
+    title: "Heisenbug | Detect npm supply-chain attacks at runtime with eBPF",
     description:
-      "Know which dependency did it. Goodman attributes kernel-level behavior to the exact npm package@version and alerts on drift — open source, Apache-2.0, runs on your cluster.",
+      "Know which dependency did it. Goodman attributes kernel-level behavior to the exact npm package@version and alerts on drift, open source, Apache-2.0, runs on your cluster.",
     url: "https://www.heisenbug.ai",
     siteName: "Heisenbug",
     locale: "en_US",
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@hi_heisenbug",
     creator: "@hi_heisenbug",
-    title: "Heisenbug — Detect npm supply-chain attacks at runtime with eBPF",
+    title: "Heisenbug | Detect npm supply-chain attacks at runtime with eBPF",
     description:
       "Know which dependency did it. Open-source eBPF runtime detection for npm supply-chain attacks.",
     images: ["/dashboard.png"],
@@ -99,9 +99,64 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.heisenbug.ai/#application",
+        "name": "Goodman",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Linux (eBPF-compatible kernels)",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD"
+        },
+        "license": "https://www.apache.org/licenses/LICENSE-2.0",
+        "downloadUrl": "https://github.com/hi-heisenbug/goodman",
+        "description": "Goodman is an open-source eBPF sensor that attributes security-relevant syscalls to the exact npm package that caused them and alerts when a dependency's behavior drifts from its learned baseline.",
+        "author": {
+          "@type": "Organization",
+          "@id": "https://www.heisenbug.ai/#organization"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.heisenbug.ai/#organization",
+        "name": "Heisenbug",
+        "url": "https://www.heisenbug.ai",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.heisenbug.ai/heisenbug_logo.png",
+          "caption": "Heisenbug Logo"
+        },
+        "sameAs": [
+          "https://github.com/hi-heisenbug/goodman",
+          "https://twitter.com/hi_heisenbug"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.heisenbug.ai/#website",
+        "url": "https://www.heisenbug.ai",
+        "name": "Heisenbug",
+        "description": "Detect npm supply-chain attacks at runtime with eBPF",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.heisenbug.ai/#organization"
+        }
+      }
+    ]
+  }
+
   return (
     <html lang="en">
       <body className={cn(dmSans.variable, inter.variable, geistMono.variable)}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <V0Provider isV0={isV0}>
           {children}
           {isV0 && <V0Setup />}

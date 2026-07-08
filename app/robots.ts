@@ -20,6 +20,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "meta-externalagent", allow: "/" },
     ],
     sitemap: "https://www.heisenbug.ai/sitemap.xml",
-    host: "https://www.heisenbug.ai",
+    host: "www.heisenbug.ai",
   };
 }

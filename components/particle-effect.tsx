@@ -58,7 +58,7 @@ export function ParticleEffect({ className }: ParticleEffectProps) {
         function createTextImage() {
             if (!ctx || !canvas) return 0
 
-            ctx.fillStyle = 'white'
+            ctx.fillStyle = '#464646'
             ctx.save()
 
             const fontSize = isMobile ? 40 : 110
@@ -100,7 +100,7 @@ export function ParticleEffect({ className }: ParticleEffectProps) {
             ctx.rotate(asteroid.rotation)
             ctx.globalAlpha = asteroid.opacity
 
-            ctx.fillStyle = '#666'
+            ctx.fillStyle = '#ccc'
             ctx.beginPath()
             const points = 6
             for (let i = 0; i < points; i++) {

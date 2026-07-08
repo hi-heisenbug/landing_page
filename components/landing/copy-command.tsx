@@ -17,7 +17,7 @@ export const CopyCommand = ({ label, command }: { label: string; command: string
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-[#2b2b2b] shadow-[0_16px_40px_-20px_rgba(70,70,70,0.45)]">
+    <div className="overflow-hidden rounded-2xl bg-[#1a1a2e] shadow-[0_16px_40px_-20px_rgba(70,70,70,0.25)]">
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
         <p className="font-mono text-xs text-neutral-400">{label}</p>
         <button

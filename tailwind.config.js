@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "media",
+  darkMode: "class",
   content: [
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -19,6 +19,10 @@ module.exports = {
       backgroundImage: {
         "gradient-primary":
           "linear-gradient(90deg,rgba(255,255,255, 0.1) 0%,rgba(255,255,255, 0.4) 100%),rgba(85,85,85,0.1)",
+        "gradient-radial":
+          "radial-gradient(ellipse at 50% 0%, rgba(147, 203, 82, 0.08) 0%, rgba(28, 151, 112, 0.04) 40%, transparent 70%)",
+        "gradient-mesh":
+          "radial-gradient(at 20% 20%, rgba(147, 203, 82, 0.06) 0%, transparent 50%), radial-gradient(at 80% 40%, rgba(28, 151, 112, 0.06) 0%, transparent 50%), radial-gradient(at 50% 80%, rgba(147, 203, 82, 0.03) 0%, transparent 50%)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -31,6 +35,12 @@ module.exports = {
       },
       animation: {
         shine: "shine 2s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        float: "float 4s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 8s ease infinite",
+        "fade-in-up": "fade-in-up 0.6s ease-out both",
+        shimmer: "shimmer 2.5s linear infinite",
+        "border-rotate": "borderRotate 6s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
@@ -38,8 +48,18 @@ module.exports = {
         mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        button: "0 1px 2px rgba(70, 70, 70, 0.08), 0 2px 8px rgba(70, 70, 70, 0.06)",
-        "button-hover": "0 2px 4px rgba(70, 70, 70, 0.12), 0 6px 20px rgba(70, 70, 70, 0.12)",
+        button: "0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04)",
+        "button-hover": "0 2px 4px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.06)",
+        "glow-green":
+          "0 0 30px rgba(147, 203, 82, 0.12), 0 0 60px rgba(147, 203, 82, 0.04)",
+        "glow-turquoise":
+          "0 0 30px rgba(28, 151, 112, 0.12), 0 0 60px rgba(28, 151, 112, 0.04)",
+        card: "0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.05)",
+        "card-hover":
+          "0 4px 24px rgba(0, 0, 0, 0.08), 0 0 40px rgba(147, 203, 82, 0.06), 0 0 1px rgba(0, 0, 0, 0.1)",
+      },
+      backdropBlur: {
+        xs: "2px",
       },
       colors: {
         background: "hsl(var(--background))",

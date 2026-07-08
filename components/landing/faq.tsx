@@ -1,3 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+
 const faqs = [
   {
     q: "What is Goodman?",
@@ -5,11 +11,11 @@ const faqs = [
   },
   {
     q: "How is this different from a dependency scanner (SCA)?",
-    a: "Scanners judge what a package might do before you install it — static analysis, registry metadata, known CVEs. Goodman watches what dependencies actually do in production. The 2026 TanStack and Axios attacks passed every scanner; the malicious behavior only appeared at runtime. The two layers are complementary, and we recommend running both.",
+    a: "Scanners judge what a package might do before you install it: static analysis, registry metadata, known CVEs. Goodman watches what dependencies actually do in production. The 2026 TanStack and Axios attacks passed every scanner; the malicious behavior only appeared at runtime. The two layers are complementary, and we recommend running both.",
   },
   {
     q: "How is this different from Falco or other eBPF runtime security tools?",
-    a: "Generic runtime tools tell you a process opened a file or connected to an IP. Goodman resolves the user-space stack through V8 perf maps and tells you which npm package inside that process did it — for example tanstack-query@1.169.5, not just node. Package-level attribution is the core difference.",
+    a: "Generic runtime tools tell you a process opened a file or connected to an IP. Goodman resolves the user-space stack through V8 perf maps and tells you which npm package inside that process did it, for example tanstack-query@1.169.5, not just node. Package-level attribution is the core difference.",
   },
   {
     q: "Does it slow down my production workloads?",
@@ -25,7 +31,7 @@ const faqs = [
   },
   {
     q: "Does it block attacks or only detect them?",
-    a: "Detection-first in v1. Goodman observes, attributes, fingerprints, and alerts — it does not block or sandbox. Blocking on kernel-level signals without high-confidence attribution causes outages; we are building trust in the signal first.",
+    a: "Detection-first in v1. Goodman observes, attributes, fingerprints, and alerts; it does not block or sandbox. Blocking on kernel-level signals without high-confidence attribution causes outages; we are building trust in the signal first.",
   },
   {
     q: "What does it cost?",
@@ -43,7 +49,33 @@ const faqJsonLd = {
   })),
 };
 
+const answerVariants: Variants = {
+  initial: { height: 0, opacity: 0 },
+  animate: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: { type: "spring", stiffness: 300, damping: 30, mass: 0.8 },
+      opacity: { duration: 0.25, delay: 0.05 },
+    },
+  },
+  exit: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: { type: "spring", stiffness: 300, damping: 30, mass: 0.8 },
+      opacity: { duration: 0.15 },
+    },
+  },
+};
+
 export const Faq = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggle = (index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  };
+
   return (
     <section id="faq" className="scroll-mt-24 border-t border-border/10">
       <script
@@ -59,15 +91,81 @@ export const Faq = () => {
             Common questions
           </h2>
         </div>
-        <dl className="mt-12 divide-y divide-border/10">
-          {faqs.map((f) => (
-            <div key={f.q} className="py-6">
-              <dt className="font-display text-lg font-bold">{f.q}</dt>
-              <dd className="mt-2 text-pretty leading-relaxed text-muted-foreground">
-                {f.a}
-              </dd>
-            </div>
-          ))}
+        <dl className="mt-12 space-y-3">
+          {faqs.map((f, i) => {
+            const isOpen = openIndex === i;
+            return (
+              <div
+                key={f.q}
+                className="relative overflow-hidden rounded-xl border border-border/10 transition-colors duration-200"
+              >
+                {/* Active left accent bar */}
+                <div
+                  className="absolute left-0 top-0 h-full w-1 transition-opacity duration-300"
+                  style={{
+                    background: "linear-gradient(to bottom, #93cb52, #1c9770)",
+                    opacity: isOpen ? 1 : 0,
+                  }}
+                />
+
+                <dt>
+                  <button
+                    type="button"
+                    onClick={() => toggle(i)}
+                    className="group flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors duration-200 hover:bg-[#f2eeee]/60"
+                    aria-expanded={isOpen}
+                  >
+                    <span
+                      className="font-display text-lg font-bold transition-colors duration-200"
+                      style={
+                        isOpen
+                          ? {
+                              background:
+                                "linear-gradient(135deg, #93cb52, #1c9770)",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent",
+                              backgroundClip: "text",
+                            }
+                          : undefined
+                      }
+                    >
+                      {f.q}
+                    </span>
+                    <motion.span
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 25,
+                      }}
+                      className="flex-shrink-0"
+                    >
+                      <ChevronDown
+                        className="h-5 w-5 text-muted-foreground transition-colors duration-200 group-hover:text-[#1c9770]"
+                        strokeWidth={2.5}
+                      />
+                    </motion.span>
+                  </button>
+                </dt>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.dd
+                      variants={answerVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6 text-pretty leading-relaxed text-muted-foreground">
+                        {f.a}
+                      </div>
+                    </motion.dd>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </dl>
       </div>
     </section>
