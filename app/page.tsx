@@ -1,16 +1,33 @@
-import { Background } from "@/components/background";
+import { Nav } from "@/components/landing/nav";
+import { Hero } from "@/components/landing/hero";
+import {
+  WhyNow,
+  Demo,
+  Detects,
+  HowItWorks,
+  WhereItSits,
+  OpenSource,
+} from "@/components/landing/sections";
+import { Faq } from "@/components/landing/faq";
+import { Cta } from "@/components/landing/cta";
+import { JsonLd } from "@/components/landing/json-ld";
 import { Footer } from "@/components/footer";
-import { Newsletter } from "@/components/newsletter";
 
 export default function Home() {
   return (
-    <main className="p-inset h-[100dvh] w-full">
-      <div className="relative h-full w-full">
-        <Background src="/background.mp4" />
-        <Newsletter />
-        <Footer />
-      </div>
+    <main className="w-full">
+      <JsonLd />
+      <Nav />
+      <Hero />
+      <WhyNow />
+      <Demo />
+      <Detects />
+      <HowItWorks />
+      <WhereItSits />
+      <OpenSource />
+      <Faq />
+      <Cta />
+      <Footer />
     </main>
   );
 }
-

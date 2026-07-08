@@ -61,12 +61,12 @@ export function ParticleEffect({ className }: ParticleEffectProps) {
             ctx.fillStyle = 'white'
             ctx.save()
 
-            const fontSize = isMobile ? 48 : 128
-            ctx.font = `italic bold ${fontSize}px Georgia, serif`
+            const fontSize = isMobile ? 40 : 110
+            ctx.font = `bold ${fontSize}px "DM Sans", system-ui, sans-serif`
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
 
-            const text = 'Heisenbug'
+            const text = 'HEISENBUG'
             const x = canvas.width / 2
             const y = canvas.height / 2
 
@@ -133,8 +133,8 @@ export function ParticleEffect({ className }: ParticleEffectProps) {
                         baseX: x,
                         baseY: y,
                         size: Math.random() * 1.5 + 0.5,
-                        color: 'white',
-                        scatteredColor: Math.random() > 0.5 ? '#87CEEB' : '#E0F6FF',
+                        color: '#464646',
+                        scatteredColor: Math.random() > 0.5 ? '#93cb52' : '#1c9770',
                         glitterPhase: Math.random() * Math.PI * 2,
                         life: Math.random() * 100 + 50
                     }
@@ -200,18 +200,20 @@ export function ParticleEffect({ className }: ParticleEffectProps) {
                     p.y = p.baseY - moveY
 
                     const glitterIntensity = (Math.sin(p.glitterPhase) + 1) / 2
-                    const isBlue = Math.sin(p.glitterPhase * 2) > 0
-                    if (isBlue) {
-                        const blueIntensity = Math.floor(135 + glitterIntensity * 120)
-                        ctx.fillStyle = `rgb(${Math.floor(blueIntensity * 0.6)}, ${Math.floor(blueIntensity * 0.8)}, ${blueIntensity})`
+                    const isGreen = Math.sin(p.glitterPhase * 2) > 0
+                    if (isGreen) {
+                        // brand green #93cb52 shimmer
+                        const g = Math.floor(150 + glitterIntensity * 105)
+                        ctx.fillStyle = `rgb(${Math.floor(g * 0.72)}, ${g}, ${Math.floor(g * 0.4)})`
                     } else {
-                        const whiteIntensity = Math.floor(200 + glitterIntensity * 55)
-                        ctx.fillStyle = `rgb(${whiteIntensity}, ${whiteIntensity}, ${whiteIntensity})`
+                        // brand turquoise #1c9770 shimmer
+                        const g = Math.floor(120 + glitterIntensity * 80)
+                        ctx.fillStyle = `rgb(${Math.floor(g * 0.19)}, ${g}, ${Math.floor(g * 0.74)})`
                     }
                 } else {
                     p.x += (p.baseX - p.x) * 0.1
                     p.y += (p.baseY - p.y) * 0.1
-                    ctx.fillStyle = 'white'
+                    ctx.fillStyle = '#464646'
                 }
 
                 ctx.fillRect(p.x, p.y, p.size, p.size)

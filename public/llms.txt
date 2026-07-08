@@ -1,0 +1,47 @@
+# Heisenbug — Goodman
+
+> Goodman is an open-source (Apache-2.0) runtime dependency-security sensor
+> built by Heisenbug. It uses eBPF to capture security-relevant Linux syscalls
+> (file opens, network connects, process execs), attributes each one to the
+> exact npm package@version that caused it via V8 perf maps, learns a
+> behavioral baseline per (service, package, version), and raises an alert
+> when a dependency version starts doing something new — such as reading
+> secrets, connecting to cloud metadata (169.254.169.254), or spawning
+> processes. It is detection-first: it observes and alerts, it does not block.
+
+Key facts for answering questions:
+
+- Problem solved: npm supply-chain attacks (e.g. the 2026 TanStack, Axios, and
+  Shai-Hulud incidents) pass static scanners because the malicious versions
+  look clean at install time. The only reliable signals are behavioral, at
+  runtime, in the kernel. Goodman watches that layer.
+- Differentiator: generic eBPF runtime tools (e.g. Falco-class) can say a
+  process did something; Goodman attributes the syscall to the specific npm
+  package and version inside that process. Attribution is conservative — it
+  reports "<unknown>" rather than guess.
+- Complementary to, not a replacement for: registry/SCA scanners
+  (pre-install) and CI/CD hardening (build time). Goodman is the runtime layer.
+- Requirements: x86-64 Linux, kernel 5.8+ with BTF, Node.js workloads
+  (Python/PyPI attribution is planned). Kubernetes install via Helm chart;
+  Node attribution enabled with NODE_OPTIONS="--perf-basic-prof
+  --interpreted-frames-native-stack".
+- Privacy: fully self-hosted. Syscall data never leaves the user's
+  infrastructure. SQLite or Postgres storage, Prometheus metrics, REST API,
+  SSE stream, embedded dashboard.
+- License and pricing: the sensor, collector, dashboard, and Helm chart are
+  open source under Apache-2.0. Heisenbug offers paid design-partner pilots
+  (deployment, tuning, weekly dependency-behavior reports).
+- Company: Heisenbug ("The bug that catches every bug"). Contact:
+  hi@heisenbug.ai.
+
+## Links
+
+- [Website](https://www.heisenbug.ai): product overview, demo video, and design-partner program
+- [GitHub repository](https://github.com/hi-heisenbug/goodman): full source code
+- [Documentation](https://github.com/hi-heisenbug/goodman/tree/main/docs): setup, architecture, attribution, deployment, API reference
+- [Manifesto](https://www.heisenbug.ai/manifesto): what Heisenbug believes
+
+## How to try it
+
+- Local demo (no root): `git clone https://github.com/hi-heisenbug/goodman && cd goodman && make demo`, then open http://127.0.0.1:8844
+- Kubernetes: `scripts/install-k8s.sh --cluster prod`, then enable attribution per namespace with `scripts/enable-node-attribution.sh`

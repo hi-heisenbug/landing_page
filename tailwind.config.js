@@ -33,13 +33,13 @@ module.exports = {
         shine: "shine 2s ease-in-out infinite",
       },
       fontFamily: {
-        serif: ["var(--font-instrument-serif)", "serif"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        button:
-          "inset 0 0 1px 1px rgba(255, 255, 255, 0.05), inset 0 0 2px 1px rgba(255, 255, 255, 0.2), inset -1px -1px 1px 0px rgba(0, 0, 0, 0.0), 0 0 10px 0 rgba(255, 255, 255, 0.1)",
-        "button-hover":
-          "inset 0 0 5px 1px rgba(255, 255, 255, 0.2), inset 0.5px 0.5px 1px 0.5px rgba(255, 255, 255, 0.5), inset -0.5px -0.5px 0.5px 0.5px rgba(0, 0, 0, 0.2), 0 0 12px 4px rgba(255, 255, 255, 0.5)",
+        button: "0 1px 2px rgba(70, 70, 70, 0.08), 0 2px 8px rgba(70, 70, 70, 0.06)",
+        "button-hover": "0 2px 4px rgba(70, 70, 70, 0.12), 0 6px 20px rgba(70, 70, 70, 0.12)",
       },
       colors: {
         background: "hsl(var(--background))",
