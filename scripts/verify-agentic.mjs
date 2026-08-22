@@ -107,6 +107,23 @@ await check("404 body points agents at recovery resources", async () => {
   assert.match(body, /llms\.txt/, "should link llms.txt");
   assert.match(body, /sitemap\.xml/, "should link sitemap.xml");
 });
+{
+  const res = await get("/some-path-that-does-not-exist", {
+    headers: { Accept: "text/markdown" },
+  });
+  await check("404 as markdown agent returns markdown recovery body", async () => {
+    assert.equal(res.status, 404);
+    assert.match(
+      res.headers.get("content-type") ?? "",
+      /^text\/markdown/,
+      `got ${res.headers.get("content-type")}`
+    );
+    const body = await res.text();
+    assert.match(body, /^#\s/m, "no H1 in markdown 404 body");
+    assert.match(body, /llms\.txt/, "should link llms.txt");
+    assert.match(body, /sitemap\.xml/, "should link sitemap.xml");
+  });
+}
 
 // 3. Markdown content negotiation
 {

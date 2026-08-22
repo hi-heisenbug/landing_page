@@ -5,6 +5,7 @@ const organization = {
   "@type": "Organization",
   "@id": "https://www.heisenbug.ai/#organization",
   name: "Heisenbug",
+  alternateName: ["Heisenbug Private Limited", "Goodman by Heisenbug"],
   url: "https://www.heisenbug.ai",
   slogan: "The bug that catches every bug",
   email: contactEmail,

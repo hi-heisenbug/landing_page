@@ -125,6 +125,7 @@ export default function RootLayout({
         "@type": "Organization",
         "@id": "https://www.heisenbug.ai/#organization",
         "name": "Heisenbug",
+        "alternateName": ["Heisenbug Private Limited", "Goodman by Heisenbug"],
         "url": "https://www.heisenbug.ai",
         "logo": {
           "@type": "ImageObject",
