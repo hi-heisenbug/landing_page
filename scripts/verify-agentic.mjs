@@ -13,6 +13,7 @@
 
 import assert from "node:assert/strict";
 import { request as httpRequest } from "node:http";
+import { request as httpsRequest } from "node:https";
 import { URL } from "node:url";
 
 const BASE = process.argv[2] ?? "http://localhost:3000";
@@ -49,11 +50,21 @@ const get = async (path, { headers = {}, method = "GET" } = {}) =>
 const rawGet = (path, { headers = {} } = {}) =>
   new Promise((resolve, reject) => {
     const url = new URL(`${BASE}${path}`);
-    const req = httpRequest(
-      { hostname: url.hostname, port: url.port, path: url.pathname, headers },
-      (res) => resolve(res)
+    const doRequest = url.protocol === "https:" ? httpsRequest : httpRequest;
+    const req = doRequest(
+      {
+        hostname: url.hostname,
+        port: url.port || (url.protocol === "https:" ? 443 : 80),
+        path: url.pathname,
+        headers,
+      },
+      (res) => {
+        res.resume();
+        resolve(res);
+      }
     );
     req.on("error", reject);
+    req.setTimeout(15000, () => req.destroy(new Error(`timeout: ${path}`)));
     req.end();
   });
 
