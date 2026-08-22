@@ -38,6 +38,63 @@ const SectionHeading = ({
   </div>
 );
 
+/**
+ * Scroll-triggered reveal applied after hydration only: server-rendered
+ * HTML is fully visible so crawlers without JavaScript read all content.
+ */
+const InViewReveal = ({
+  children,
+  className,
+  delay = 0,
+  y = 30,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  y?: number;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof IntersectionObserver === "undefined") return;
+
+    let revealed = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !revealed) {
+            revealed = true;
+            el.style.opacity = "1";
+            el.style.transform = "none";
+            observer.disconnect();
+          }
+        }
+      },
+      { rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const rect = el.getBoundingClientRect();
+    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+    if (!inViewport) {
+      el.style.transition = `opacity 0.55s ease-out ${delay}s, transform 0.55s ease-out ${delay}s`;
+      el.style.opacity = "0";
+      el.style.transform = `translateY(${y}px)`;
+      observer.observe(el);
+    }
+
+    return () => observer.disconnect();
+  }, [delay, y]);
+
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+};
+
 /* ── Animated counter component ── */
 const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -67,7 +124,7 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
   }, [isInView, value]);
 
   return (
-    <div ref={ref} className="flex flex-col items-center gap-3 text-center">
+    <InViewReveal delay={0.2} y={20} className="flex flex-col items-center gap-3 text-center">
       <div className="relative">
         {/* Pulse glow effect behind stat number */}
         <motion.div
@@ -82,24 +139,14 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
             ease: "easeInOut",
           }}
         />
-        <motion.p
-          className="relative font-display text-5xl font-bold tracking-tight bg-gradient-to-r from-[#93cb52] to-[#1c9770] bg-clip-text text-transparent sm:text-6xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <p className="relative font-display text-5xl font-bold tracking-tight bg-gradient-to-r from-[#93cb52] to-[#1c9770] bg-clip-text text-transparent sm:text-6xl">
           {displayValue}
-        </motion.p>
+        </p>
       </div>
-      <motion.p
-        className="max-w-xs text-sm leading-relaxed text-[#464646]/70"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
+      <p className="max-w-xs text-sm leading-relaxed text-[#464646]/70">
         {label}
-      </motion.p>
-    </div>
+      </p>
+    </InViewReveal>
   );
 };
 
@@ -168,19 +215,9 @@ const DetectCard = ({
   item: { icon: React.ComponentType<React.SVGProps<SVGSVGElement> & { strokeWidth?: number }>; title: string; body: string };
   index: number;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.12,
-        ease: "easeOut",
-      }}
+    <InViewReveal
+      delay={index * 0.12}
       className="group relative flex flex-col gap-3 rounded-2xl border border-[#464646]/[0.08] bg-white p-6 transition-all duration-300 hover:border-[#1c9770]/30 hover:-translate-y-1.5 hover:shadow-[0_12px_50px_-12px_rgba(28,151,112,0.18)]"
     >
       {/* Gradient sweep overlay on hover */}
@@ -209,7 +246,7 @@ const DetectCard = ({
       </div>
       <h3 className="text-lg font-semibold text-[#464646]">{item.title}</h3>
       <p className="text-sm leading-relaxed text-[#464646]/70">{item.body}</p>
-    </motion.div>
+    </InViewReveal>
   );
 };
 
@@ -260,19 +297,9 @@ const StepCard = ({
   step: { n: string; title: string; body: string };
   index: number;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30, scale: 0.97 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.97 }}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.15,
-        ease: "easeOut",
-      }}
+    <InViewReveal
+      delay={index * 0.15}
       className="relative flex flex-col gap-3 rounded-2xl bg-white p-6 shadow-[0_2px_20px_-6px_rgba(70,70,70,0.1)]"
     >
       {/* Gradient top border accent */}
@@ -301,7 +328,7 @@ const StepCard = ({
       </div>
       <h3 className="text-lg font-semibold text-[#464646]">{step.title}</h3>
       <p className="text-sm leading-relaxed text-[#464646]/70">{step.body}</p>
-    </motion.div>
+    </InViewReveal>
   );
 };
 
@@ -399,15 +426,10 @@ const HighlightedLayerCard = ({
 }: {
   layer: { when: string; what: string; body: string };
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.5, delay: 0.25 }}
+    <InViewReveal
+      delay={0.25}
+      y={20}
       className="relative flex flex-col gap-3 rounded-2xl p-px overflow-hidden"
     >
       {/* Pulsing border glow */}
@@ -449,7 +471,7 @@ const HighlightedLayerCard = ({
         <h3 className="text-lg font-semibold text-[#464646]">{layer.what}</h3>
         <p className="text-sm leading-relaxed text-[#464646]/70">{layer.body}</p>
       </div>
-    </motion.div>
+    </InViewReveal>
   );
 };
 
@@ -475,25 +497,21 @@ export const WhereItSits = () => {
     },
   ];
 
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-20 lg:py-28">
       <SectionHeading eyebrow="Where it sits" title="Complementary to your scanner, not a replacement">
         Supply-chain defense is layered. Goodman is the runtime layer that
         keeps working after everything upstream said the package was fine.
       </SectionHeading>
-      <div ref={ref} className="mt-12 grid gap-4 lg:grid-cols-3">
+      <div className="mt-12 grid gap-4 lg:grid-cols-3">
         {layers.map((layer, index) =>
           layer.highlight ? (
             <HighlightedLayerCard key={layer.what} layer={layer} />
           ) : (
-            <motion.div
+            <InViewReveal
               key={layer.what}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: index * 0.12 }}
+              delay={index * 0.12}
+              y={20}
               className="flex flex-col gap-3 rounded-2xl border border-[#464646]/[0.08] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_-10px_rgba(70,70,70,0.12)] hover:border-[#464646]/15"
             >
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#464646]/50">
@@ -501,7 +519,7 @@ export const WhereItSits = () => {
               </p>
               <h3 className="text-lg font-semibold text-[#464646]">{layer.what}</h3>
               <p className="text-sm leading-relaxed text-[#464646]/70">{layer.body}</p>
-            </motion.div>
+            </InViewReveal>
           )
         )}
       </div>

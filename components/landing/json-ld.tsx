@@ -9,6 +9,20 @@ const organization = {
   slogan: "The bug that catches every bug",
   email: contactEmail,
   logo: "https://www.heisenbug.ai/icon.svg",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "6th Floor, Lightbridge, Hiranandani Business Park",
+    addressLocality: "Mumbai",
+    addressRegion: "Maharashtra",
+    postalCode: "400072",
+    addressCountry: "IN",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: contactEmail,
+    contactType: "technical support",
+    availableLanguage: ["English"],
+  },
   sameAs: [
     socialLinks.linkedin,
     socialLinks.x,

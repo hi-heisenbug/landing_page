@@ -131,6 +131,20 @@ export default function RootLayout({
           "url": "https://www.heisenbug.ai/heisenbug_logo.png",
           "caption": "Heisenbug Logo"
         },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "6th Floor, Lightbridge, Hiranandani Business Park",
+          "addressLocality": "Mumbai",
+          "addressRegion": "Maharashtra",
+          "postalCode": "400072",
+          "addressCountry": "IN"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "hi@heisenbug.ai",
+          "contactType": "technical support",
+          "availableLanguage": ["English"]
+        },
         "sameAs": [
           "https://github.com/hi-heisenbug/goodman",
           "https://twitter.com/hi_heisenbug"

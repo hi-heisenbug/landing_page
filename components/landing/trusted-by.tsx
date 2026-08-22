@@ -1,19 +1,55 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { useEffect, useRef } from "react";
 
-const logoVariants: Variants = {
-  hidden: { opacity: 0, y: 15 },
-  visible: (i: number) => ({
-    opacity: 0.5,
-    y: 0,
-    transition: {
-      delay: 0.1 * i,
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  }),
-};
+/**
+ * Scroll-triggered stagger reveal applied after hydration only: raw HTML is
+ * fully visible so no-JS crawlers see the logo names.
+ */
+function useLogoReveal() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (typeof IntersectionObserver === "undefined") return;
+
+    const children = Array.from(el.children) as HTMLElement[];
+    let revealed = false;
+
+    const show = () => {
+      if (revealed) return;
+      revealed = true;
+      children.forEach((child, i) => {
+        child.style.transition = "opacity 0.5s ease-out";
+        child.style.transitionDelay = `${0.1 * i}s`;
+        child.style.opacity = "0.5";
+        child.style.transform = "none";
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && show()),
+      { rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const rect = el.getBoundingClientRect();
+    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+    if (!inViewport) {
+      children.forEach((child) => {
+        child.style.opacity = "0";
+        child.style.transform = "translateY(15px)";
+      });
+      observer.observe(el);
+    } else {
+      show();
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return containerRef;
+}
 
 const logos = [
   {
@@ -74,28 +110,27 @@ const logos = [
 ];
 
 export const TrustedBy = () => {
+  const containerRef = useLogoReveal();
+
   return (
     <section className="relative w-full border-t border-[#464646]/5 bg-[#f2eeee]/30 py-10">
       <div className="mx-auto max-w-6xl px-6">
         <p className="text-center font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/80">
           Trusted by developers deploying to
         </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 md:gap-x-16">
-          {logos.map((logo, i) => (
-            <motion.div
+        <div
+          ref={containerRef}
+          className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-8 md:gap-x-16"
+        >
+          {logos.map((logo) => (
+            <div
               key={logo.name}
-              custom={i}
-              variants={logoVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
-              whileHover={{ scale: 1.05, opacity: 0.95 }}
-              className={`flex items-center gap-1.5 font-display font-bold text-[14px] tracking-wide text-muted-foreground/50 transition-all duration-300 ${logo.hoverColor} cursor-default`}
+              className={`flex items-center gap-1.5 font-display font-bold text-[14px] tracking-wide text-muted-foreground/50 transition-all duration-300 hover:scale-105 hover:opacity-95 ${logo.hoverColor} cursor-default`}
               aria-label={logo.name}
             >
               {logo.icon}
               <span>{logo.name}</span>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

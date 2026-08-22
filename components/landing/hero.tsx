@@ -5,28 +5,42 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { buttonVariants } from "@/components/ui/button";
 import { links } from "@/lib/constants";
 import { TerminalCard } from "./terminal-card";
-import { motion, type Variants } from "framer-motion";
+import { useEffect } from "react";
 
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.1,
-    },
-  },
-};
+/**
+ * Entrance animation applied after hydration only: the server-rendered HTML
+ * stays fully visible so crawlers without JavaScript read all hero content,
+ * while human visitors still get the staggered fade-up on load.
+ */
+function useStaggeredEntrance(delayStep = 0.12) {
+  useEffect(() => {
+    const el = document.querySelector<HTMLElement>("[data-hero-stagger]");
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
-  },
-};
+    const children = Array.from(el.children) as HTMLElement[];
+    children.forEach((child, i) => {
+      child.style.transition = "opacity 0.6s ease-out, transform 0.6s ease-out";
+      child.style.transitionDelay = `${0.1 + i * delayStep}s`;
+      child.style.opacity = "0";
+      child.style.transform = "translateY(24px)";
+    });
+
+    const raf = requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        children.forEach((child) => {
+          child.style.opacity = "1";
+          child.style.transform = "none";
+        });
+      })
+    );
+    return () => cancelAnimationFrame(raf);
+  }, [delayStep]);
+}
 
 export const Hero = () => {
+  useStaggeredEntrance();
+
   return (
     <section className="relative overflow-hidden">
       {/* Ambient background glow */}
@@ -36,49 +50,35 @@ export const Hero = () => {
         <div className="absolute right-0 top-0 h-[300px] w-[400px] rounded-full bg-[#bef3e2]/[0.3] blur-[80px]" />
       </div>
 
-      <motion.div
+      <div
+        data-hero-stagger
         className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pb-20 pt-32 md:pt-40 lg:grid-cols-2 lg:gap-16 lg:pb-28"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
       >
-        <motion.div
-          className="flex min-w-0 flex-col items-start gap-6"
-          variants={containerVariants}
-        >
+        <div className="flex min-w-0 flex-col items-start gap-6">
           {/* Animated badge/pill */}
-          <motion.div variants={fadeInUp} className="relative">
+          <div className="relative">
             <div className="absolute -inset-px rounded-full bg-gradient-to-r from-[#93cb52]/30 via-[#1c9770]/20 to-[#93cb52]/30 blur-[2px]" />
             <p className="relative rounded-full border border-[#93cb52]/25 bg-white/80 px-3 py-1 font-mono text-xs text-[#464646]/70 backdrop-blur-sm">
               Open source · eBPF · Apache-2.0
             </p>
-          </motion.div>
+          </div>
 
-          <motion.h1
-            variants={fadeInUp}
-            className="text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
-          >
+          <h1 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
             Know{" "}
             <span className="bg-gradient-to-r from-[#93cb52] to-[#1c9770] bg-clip-text text-transparent">
               which dependency
             </span>{" "}
             did it.
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            variants={fadeInUp}
-            className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
-          >
+          <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
             The kernel can tell you a process read a secret or connected to a new
             host. Goodman tells you which npm package, and which version, did
             it, and alerts the moment a dependency does something it has never
             done before.
-          </motion.p>
+          </p>
 
-          <motion.div
-            variants={fadeInUp}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto"
-          >
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <Link
               href={links.pilotCall}
               className={buttonVariants({ variant: "iconButton", className: "h-11 px-6 text-base w-full sm:w-auto text-center justify-center" })}
@@ -93,22 +93,17 @@ export const Hero = () => {
               <GitHubLogoIcon className="size-5" />
               Star on GitHub
             </Link>
-          </motion.div>
+          </div>
 
-          <motion.p
-            variants={fadeInUp}
-            className="font-mono text-xs text-muted-foreground"
-          >
+          <p className="font-mono text-xs text-muted-foreground">
             Runs on your cluster · Helm install in minutes · detection-first, no agents in your code
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
-        <motion.div
-          variants={fadeInUp}
-        >
+        <div>
           <TerminalCard />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </section>
   );
 };

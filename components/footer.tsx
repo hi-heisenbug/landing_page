@@ -4,7 +4,7 @@ import XLogoIcon from "./icons/x";
 import LinkedInLogoIcon from "./icons/linkedin";
 import InstagramLogoIcon from "./icons/instagram";
 import YouTubeLogoIcon from "./icons/youtube";
-import { contactEmail, links, socialLinks } from "@/lib/constants";
+import { links, socialLinks } from "@/lib/constants";
 import { Logo } from "./landing/logo";
 
 const footerLinks = [
@@ -12,8 +12,10 @@ const footerLinks = [
   { href: links.docs, label: "Docs", external: true },
   { href: "/blog", label: "Blog", external: false },
   { href: "/#faq", label: "FAQ", external: false },
+  { href: "/about", label: "About", external: false },
+  { href: "/contact", label: "Contact", external: false },
+  { href: "/privacy", label: "Privacy", external: false },
   { href: "/manifesto", label: "Manifesto", external: false },
-  { href: `mailto:${contactEmail}`, label: "Contact", external: false },
 ];
 
 const socials = [
